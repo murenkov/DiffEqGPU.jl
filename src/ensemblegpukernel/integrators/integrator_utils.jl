@@ -34,7 +34,7 @@ end
     elseif saveat !== nothing
         saved = true
         savedexactly = true
-        while integrator.cur_t <= length(saveat) && saveat[integrator.cur_t] <= integrator.t
+        while integrator.cur_t <= length(saveat) && integrator.tdir * saveat[integrator.cur_t] <= integrator.tdir * integrator.t
             savet = saveat[integrator.cur_t]
             Θ = (savet - integrator.tprev) / integrator.dt
             @inbounds us[integrator.cur_t] = _ode_interpolant(

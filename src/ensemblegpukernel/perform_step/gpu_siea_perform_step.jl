@@ -89,6 +89,7 @@ end
 
     # FIX: Ensure n calculation uses proper types
     t0, tf = tspan[1], tspan[2]
+    tdir = sign(tf - t0)
     n = floor(Int, abs(tf - t0) / abs(dt)) + 1
 
     cache = SIEAConstantCache(eltype(u0), Tt)
@@ -122,7 +123,7 @@ end
             @inbounds us[j] = u
             @inbounds ts[j] = t
         elseif saveat !== nothing
-            while cur_t <= length(saveat) && saveat[cur_t] <= t
+            while cur_t <= length(saveat) && tdir * saveat[cur_t] <= tdir * t
                 savet = saveat[cur_t]
                 Θ = (savet - (t - dt)) / dt
                 # Linear Interpolation
