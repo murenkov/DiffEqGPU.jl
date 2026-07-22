@@ -46,11 +46,11 @@
 
         integ.step_idx += 1
         # FSAL
-        while integ.t < tspan[2] && integ.retcode != DiffEqBase.ReturnCode.Terminated
+        while integ.tdir * integ.t < integ.tdir * tspan[2] && integ.retcode != DiffEqBase.ReturnCode.Terminated
             saved_in_cb = step!(integ, ts, us)
             !saved_in_cb && savevalues!(integ, ts, us)
         end
-        if integ.t > tspan[2] && saveat === nothing
+        if integ.tdir * integ.t > integ.tdir * tspan[2] && saveat === nothing
             ## Interpolate to tf
             @inbounds us[end] = integ(tspan[2])
             @inbounds ts[end] = tspan[2]
@@ -125,12 +125,12 @@ end
             @inbounds us[1] = u0
         end
 
-        while integ.t < tspan[2] && integ.retcode != DiffEqBase.ReturnCode.Terminated
+        while integ.tdir * integ.t < integ.tdir * tspan[2] && integ.retcode != DiffEqBase.ReturnCode.Terminated
             saved_in_cb = step!(integ, ts, us)
             !saved_in_cb && savevalues!(integ, ts, us)
         end
 
-        if integ.t > tspan[2] && saveat === nothing
+        if integ.tdir * integ.t > integ.tdir * tspan[2] && saveat === nothing
             ## Interpolate to tf
             @inbounds us[end] = integ(tspan[2])
             @inbounds ts[end] = tspan[2]
